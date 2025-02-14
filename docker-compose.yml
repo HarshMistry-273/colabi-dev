@@ -1,0 +1,35 @@
+name: colabi-backend
+services:
+
+  app:
+    build: .
+    container_name: "colabi_app"
+    ports:
+      - "8001:8000"
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+
+  redis:
+    image: "redis"
+    ports:
+      - "6380:6379"
+    volumes:
+      - ./redis-data:/data
+
+  celery_worker:
+    build: .
+    command: celery -A src.celery worker --pool=solo --loglevel=info
+    volumes:
+      - .:/app
+      # - ./upload:/app/upload  # Local upload directory mapping
+      - ..\public\upload:/app/external_upload # External XAMPP upload directory
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+    restart: unless-stopped
