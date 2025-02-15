@@ -175,6 +175,7 @@ def task_creation_celery(
             db=db,
             completed_task_id=completed_task_id,
             status=2,
+            success=False
         )
         return f"Task failed: {task_id}, Completed Task Id: {completed_task_id}"
 
