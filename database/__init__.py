@@ -18,12 +18,7 @@ host = Config.MYSQL_HOST_NAME
 # url = f"mysql+pymysql://{user}:{password}@{host}:{port}/{database}"
 url = "mysql+pymysql://root:@host.docker.internal:3306/brmkjimy_survey"
 engine = create_engine(
-    url,
-    pool_size=10,
-    max_overflow=20,
-    pool_timeout=30,
-    pool_recycle=1800,
-    pool_pre_ping=True,  # Add this line
+    url
 )
 
 
